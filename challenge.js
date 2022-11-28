@@ -4,12 +4,6 @@ function calculateRandomNumber(min, max) {
     const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
     return randomNumber;
   }
-
-//configurating node utility so that data is requested and displayed on the console.
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
   
 
 const students = [{
@@ -54,7 +48,7 @@ function showAllStudents () {
 
 //#2 Show by console the number of students in the class
 function studentsInClass() {
-    console.log(students.length)
+    console.log('The number of students in the class is:',students.length)
 }
 
 //#3 Show all student names by console
@@ -216,7 +210,17 @@ function sortStudentsByName() {
   console.log(students)
 }
 
-function showAllOptions() {
+
+//configurating node utility so that data is requested and displayed on the console.
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+
+function menu() {
+  let option = 0;
+  console.log('------------------Menu------------------------')
   console.log('#1 Display all students in table format')
   console.log('#2 Show by console the number of students in the class')
   console.log('#3 Show all student names by console')
@@ -231,88 +235,79 @@ function showAllOptions() {
   console.log('#12 Show by console the average age of all students in the class')
   console.log('#13 Show by console the average age of the girls in the class')
   console.log('#14 Add a new grade for the students')
-  console.log('#15 Sort the array of students alphabetically according to their name')  
+  console.log('#15 Sort the array of students alphabetically according to their name') 
+  console.log('------------------------------------------------') 
+  return option;
 }
-showAllOptions();
+menu();
 
-function isInt(str) {
-  // returns a boolean
-  return /^[0-9]+$/.test(str);
+function isNumber(value) {
+  const number = Number.parseInt(value);
+
+  // Opcion A: Devolver la negación de isNan
+  return !Number.isNaN(number);
+
 }
 
-function getNumberFromUser() {
+
+
+function askNumberFromUser() {
   const promise = new Promise((resolve, reject) => {
-      rl.question('Choose an option number: ', (option) => {
+      rl.question('Choose an option number: ', (optionAsString) => {
         rl.pause();
-        if (isInt(option)) {
-          option = Number.parseInt(option);
-          resolve(option);
+        
+        if (isNumber(optionAsString)) {
+          resolve(optionAsString);
         } else {
-          reject("You must enter a number!");
+          reject(`The value ${optionAsString} is not a number. Please try again!`);
         }
+        
       });
     });
   return promise;
 }
 
-async function main() {
+
 try {
-  const numberFromUser = await getNumberFromUser()
-  console.log(numberFromUser)
-} catch {
-  console.log('You must enter a number between 1 and 15')
-}
-console.log('fin de script')
-}
-
-main();
-
-function userChoosesOption(option) {
-  switch (option) {
-    case 1:
-      showAllStudents ();  
-      break;
-    case 2:
-      studentsInClass();  
-      break;
-    case 3:
-      showStudentsNames();  
-      break;
-    case 4:
-      removeLastStudent();  
-      break;
-    case 5:
-      removeStudentRandomly();  
-      break;
-    case 6:
-      showFemaleStudents();  
-      break;
-    case 7:
-      numberBoysAndGirls();  
-      break;
-    case 8:
-      allStudentsAreGirls();  
-      break;
-    case 9:
-      studentsAged20to25();  
-      break;
-    case 10:
-      addNewStudent();  
-      break;
-    case 11:
-      showYoungestStudent();  
-      break;
-    case 12:
-      showAverageAge();  
-      break;
-    case 13:
-      femaleAverageAge();  
-      break;
-    case 14:
-      addNewGrade();  
-      break;
-    default:
-      sortStudentsByName();
-      break;
+  const numberFromUser = await askNumberFromUser()
+  
+  if(numberFromUser == 1) {
+    showAllStudents ();
+  } else if (numberFromUser == 2) {
+    studentsInClass(); 
+  } else if (numberFromUser == 3) {
+    showStudentsNames();
+  } else if (numberFromUser == 4) {
+    removeLastStudent();
+  } else if (numberFromUser == 5) {
+    removeStudentRandomly();  
+  } else if (numberFromUser == 6) {
+    showFemaleStudents();
+  } else if (numberFromUser == 7) {
+    numberBoysAndGirls(); 
+  } else if (numberFromUser == 8) {
+    allStudentsAreGirls();
+  } else if (numberFromUser == 9) {
+    studentsAged20to25();  
+  } else if (numberFromUser == 10) {
+    addNewStudent();
+  } else if (numberFromUser == 11) {
+    showYoungestStudent(); 
+  } else if (numberFromUser == 12) {
+    showAverageAge();
+  } else if (numberFromUser == 13) {
+    femaleAverageAge();  
+  } else if (numberFromUser == 14) {
+    addNewGrade();  
+  } else if (numberFromUser == 15) {
+    sortStudentsByName();
+  } else {
+    console.log("Incorrect option, you must choose a number from 1 to 15.")
   }
+  
+} catch (error) {
+    console.error('UUUPS, this is not good!');
+    console.error(error);
 }
+
+
